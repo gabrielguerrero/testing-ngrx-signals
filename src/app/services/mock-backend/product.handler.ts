@@ -1,55 +1,62 @@
-import { http, HttpResponse } from 'msw';
+import { rest } from 'msw';
 import { Product, ProductDetail } from '../../models';
 import { getRandomInteger, sortData } from './utils';
 export const productHandlers = [
-  http.post('/checkout', () => {
-    return HttpResponse.json('123', { status: 200 });
-  }),
-  http.get('/products/:id', ({ params }) => {
-    const id = params['id'];
-    const product = mockProducts.find((p) => p.id === id);
-    const productDetail =
-      product &&
-      ({
-        ...product,
-        id: product?.id,
-        image: 'assets/' + images[getRandomInteger(0, 4)],
-        maker: 'Nintendo',
-        releaseDate: '' + getRandomInteger(1990, 2000),
-      } as ProductDetail);
-    return HttpResponse.json(productDetail, { status: 200 });
-  }),
-  http.get('http://localhost:8080/api/products', ({ request }) => {
-    console.log('request', request.url);
-    let result = [...mockProducts];
-    const url = new URL(request.url);
-    const options = {
-      search: url.searchParams.get('search'),
-      sortColumn: url.searchParams.get('sortColumn'),
-      sortAscending: url.searchParams.get('sortAscending'),
-      skip: url.searchParams.get('skip'),
-      take: url.searchParams.get('take'),
-    };
-    if (options?.search)
-      result = mockProducts.filter((entity) => {
-        return options?.search
-          ? entity.name.toLowerCase().includes(options?.search.toLowerCase())
-          : false;
-      });
-    const total = result.length;
-    if (options?.skip || options?.take) {
-      const skip = +(options?.skip ?? 0);
-      const take = +(options?.take ?? 0);
-      result = result.slice(skip, skip + take);
-    }
-    if (options?.sortColumn) {
-      result = sortData(result, {
-        field: options.sortColumn,
-        direction: options.sortAscending === 'true' ? 'asc' : 'desc',
-      });
-    }
-    return HttpResponse.json({ resultList: result, total });
-  }),
+  rest.post<{ productId: string; quantity: number }[], never, string>(
+    '/checkout',
+    (req, res, ctx) => {
+      return res(ctx.status(200), ctx.json('123'));
+    },
+  ),
+  rest.get<never, { id: string }, ProductDetail | undefined>(
+    '/products/:id',
+    (req, res, ctx) => {
+      const id = req.params.id;
+      const product = mockProducts.find((p) => p.id === id);
+      const productDetail =
+        product &&
+        ({
+          ...product,
+          id: product?.id,
+          image: 'assets/' + images[getRandomInteger(0, 4)],
+          maker: 'Nintendo',
+          releaseDate: '' + getRandomInteger(1990, 2000),
+        } as ProductDetail);
+      return res(ctx.status(200), ctx.json(productDetail));
+    },
+  ),
+  rest.get<never, ProductsQuery, ProductsResponse>(
+    '/products',
+    (req, res, ctx) => {
+      let result = [...mockProducts];
+      const options = {
+        search: req.url.searchParams.get('search'),
+        sortColumn: req.url.searchParams.get('sortColumn'),
+        sortAscending: req.url.searchParams.get('sortAscending'),
+        skip: req.url.searchParams.get('skip'),
+        take: req.url.searchParams.get('take'),
+      };
+      if (options?.search)
+        result = mockProducts.filter((entity) => {
+          return options?.search
+            ? entity.name.toLowerCase().includes(options?.search.toLowerCase())
+            : false;
+        });
+      const total = result.length;
+      if (options?.skip || options?.take) {
+        const skip = +(options?.skip ?? 0);
+        const take = +(options?.take ?? 0);
+        result = result.slice(skip, skip + take);
+      }
+      if (options?.sortColumn) {
+        result = sortData(result, {
+          field: options.sortColumn as any,
+          direction: options.sortAscending === 'true' ? 'asc' : 'desc',
+        });
+      }
+      return res(ctx.status(200), ctx.json({ resultList: result, total }));
+    },
+  ),
 ];
 
 export type ProductsQuery = {
@@ -199,7 +206,7 @@ const images = [
   'images/Donkey_Kong_Country.png',
 ];
 
-export const mockProducts: Product[] = [
+const mockProducts: Product[] = [
   ...snes.map((name, id) => ({
     name,
     id: id + '',

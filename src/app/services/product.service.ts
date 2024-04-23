@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { delay, tap } from 'rxjs/operators';
 
 import { Product, ProductDetail } from '../models';
-import { mockProducts } from './mock-backend/product.handler';
+// import { mockProducts } from './mock-backend/product.handler';
 import { of } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
@@ -22,7 +22,7 @@ export class ProductService {
       .get<{
         resultList: Product[];
         total: number;
-      }>('http://localhost:8080/api/products')
+      }>('/products')
       .pipe(tap(console.log), delay(500));
   }
 
