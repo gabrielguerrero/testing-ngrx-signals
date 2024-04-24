@@ -7,7 +7,6 @@ import { ProductListDetail } from './product-list-detail/product-list-detail.com
   standalone: true,
   imports: [RouterOutlet, ProductListDetail],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css',
 })
 export class AppComponent {
   title = 'ngrx-traits-signals-playground';
