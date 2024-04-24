@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { ProductListDetail } from './product-list-paginated-page/product-list-detail.component';
+import { ProductListDetail } from './product-list-detail/product-list-detail.component';
 
 @Component({
   selector: 'app-root',

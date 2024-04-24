@@ -1,10 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { delay, tap } from 'rxjs/operators';
+import { delay } from 'rxjs/operators';
 
 import { Product, ProductDetail } from '../models';
-// import { mockProducts } from './mock-backend/product.handler';
-import { of } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class ProductService {
@@ -17,18 +15,17 @@ export class ProductService {
     skip?: number | undefined;
     take?: number | undefined;
   }) {
-    console.log('getProducts', options);
     return this.httpClient
       .get<{
         resultList: Product[];
         total: number;
       }>('/products')
-      .pipe(tap(console.log), delay(500));
+      .pipe(delay(500));
   }
 
   getProductDetail(id: string) {
     return this.httpClient
-      .get<ProductDetail>('/api/products/' + id)
+      .get<ProductDetail>('/products/' + id)
       .pipe(delay(500));
   }
 }

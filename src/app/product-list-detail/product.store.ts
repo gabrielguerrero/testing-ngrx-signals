@@ -33,19 +33,16 @@ export const ProductsLocalStore = signalStore(
       inject(ProductService).getProductDetail(id),
   })),
   withHooks(({ setLoaded, setError, ...store }) => ({
-    onInit: () => {
+    onInit: async () => {
       const productService = inject(ProductService);
-      effect(async () => {
-        console.log('onInit');
-        try {
-          const res = await lastValueFrom(productService.getProducts());
-          console.log('res', res);
-          patchState(store, setAllEntities(res.resultList));
-          setLoaded();
-        } catch (e) {
-          setError(e);
-        }
-      });
+      try {
+        const res = await lastValueFrom(productService.getProducts());
+        console.log('res', res);
+        patchState(store, setAllEntities(res.resultList));
+        setLoaded();
+      } catch (e) {
+        setError(e);
+      }
     },
   })),
 );

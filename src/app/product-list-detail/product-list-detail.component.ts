@@ -10,6 +10,9 @@ import { MatList, MatListItem } from '@angular/material/list';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
+import { ProductDetailComponent } from './product-detail/product-detail.component';
+import { Product } from '../models';
+import { MatDivider } from '@angular/material/divider';
 
 @Component({
   selector: 'product-list-detail',
@@ -37,7 +40,11 @@ import { FormsModule } from '@angular/forms';
             product of store.entitiesCurrentPage().entities;
             track product.id
           ) {
-            <mat-list-item>{{ product.name }}</mat-list-item>
+            <mat-list-item
+              [class.selected]="store.entitySelected() === product"
+              (click)="select(product)"
+              >{{ product.name }}</mat-list-item
+            >
           }
         </mat-list>
         <!-- 👇 entitiesCurrentPage has all the props
@@ -49,17 +56,21 @@ import { FormsModule } from '@angular/forms';
           [pageIndex]="store.entitiesCurrentPage().pageIndex"
           (page)="store.loadEntitiesPage($event)"
         />
+        <mat-divider />
+        @if (store.isLoadProductDetailLoading()) {
+          <mat-spinner />
+        } @else if (store.isLoadProductDetailLoaded()) {
+          <product-detail [product]="store.loadProductDetailResult()" />
+        } @else {
+          <h2>Please Select a product</h2>
+        }
       </div>
     }
   `,
   styles: [
     `
-      mat-card-content > mat-spinner {
-        margin: 10px auto;
-      }
-      mat-card-actions mat-spinner {
-        display: inline-block;
-        margin-right: 5px;
+      .selected {
+        background-color: #009688;
       }
     `,
   ],
@@ -77,9 +88,16 @@ import { FormsModule } from '@angular/forms';
     MatLabel,
     MatInput,
     FormsModule,
+    ProductDetailComponent,
+    MatDivider,
   ],
   providers: [ProductsLocalStore],
 })
 export class ProductListDetail {
   store = inject(ProductsLocalStore);
+
+  select({ id }: Product) {
+    this.store.selectEntity({ id });
+    this.store.loadProductDetail({ id });
+  }
 }
