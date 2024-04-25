@@ -5,7 +5,6 @@ import { MatCardModule } from '@angular/material/card';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
-import { ProductsLocalStore } from './product.store';
 import { MatList, MatListItem } from '@angular/material/list';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
@@ -13,9 +12,10 @@ import { FormsModule } from '@angular/forms';
 import { ProductDetailComponent } from './product-detail/product-detail.component';
 import { Product } from '../models';
 import { MatDivider } from '@angular/material/divider';
+import { ProductsRemoteStore } from './product-remote.store';
 
 @Component({
-  selector: 'product-list-detail',
+  selector: 'product-list-detail-remote',
   template: `
     <form class="p-8 pb-0">
       <mat-form-field appearance="outline" subscriptSizing="dynamic">
@@ -23,13 +23,15 @@ import { MatDivider } from '@angular/material/divider';
         <input
           type="text"
           matInput
-          [ngModel]="store.entitiesFilter().search"
+          [ngModel]="store.productsFilter().search"
           name="search"
-          (ngModelChange)="store.filterEntities({ filter: { search: $event } })"
+          (ngModelChange)="
+            store.filterProductsEntities({ filter: { search: $event } })
+          "
         />
       </mat-form-field>
     </form>
-    @if (store.isLoading()) {
+    @if (store.productsCurrentPage().isLoading) {
       <mat-spinner />
     } @else {
       <div class="list-detail">
@@ -38,11 +40,11 @@ import { MatDivider } from '@angular/material/divider';
             <!-- 👇 we use store.entitiesCurrentPage().entities
               instead of store.entities() ↓ -->
             @for (
-              product of store.entitiesCurrentPage().entities;
+              product of store.productsCurrentPage().entities;
               track product.id
             ) {
               <mat-list-item
-                [class.selected]="store.entitySelected() === product"
+                [class.selected]="store.productsEntitySelected() === product"
                 (click)="select(product)"
                 >{{ product.name }}
               </mat-list-item>
@@ -52,10 +54,10 @@ import { MatDivider } from '@angular/material/divider';
                   needed for the paginator, and loadEntitiesPage
                   handles page changes -->
           <mat-paginator
-            [length]="store.entitiesCurrentPage().total"
-            [pageSize]="store.entitiesCurrentPage().pageSize"
-            [pageIndex]="store.entitiesCurrentPage().pageIndex"
-            (page)="store.loadEntitiesPage($event)"
+            [length]="store.productsCurrentPage().total"
+            [pageSize]="store.productsCurrentPage().pageSize"
+            [pageIndex]="store.productsCurrentPage().pageIndex"
+            (page)="store.loadProductsPage($event)"
           />
         </div>
         @if (store.isLoadProductDetailLoading()) {
@@ -68,30 +70,7 @@ import { MatDivider } from '@angular/material/divider';
       </div>
     }
   `,
-  styles: [
-    `
-      .selected {
-        background-color: #009688;
-      }
-      :host {
-        display: block;
-        padding: 1rem;
-        margin: auto;
-        max-width: 800px;
-      }
-      .list-detail {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 1rem;
-        margin: 1rem;
-      }
-      @media (min-width: 640px) {
-        .list-detail {
-          grid-template-columns: auto 1fr;
-        }
-      }
-    `,
-  ],
+  styleUrl: './product-list-detail-component.css',
   standalone: true,
   imports: [
     MatCardModule,
@@ -109,13 +88,13 @@ import { MatDivider } from '@angular/material/divider';
     ProductDetailComponent,
     MatDivider,
   ],
-  providers: [ProductsLocalStore],
+  providers: [ProductsRemoteStore],
 })
-export class ProductListDetail {
-  store = inject(ProductsLocalStore);
+export class ProductListDetailRemoteComponent {
+  store = inject(ProductsRemoteStore);
 
   select({ id }: Product) {
-    this.store.selectEntity({ id });
+    this.store.selectProductsEntity({ id });
     this.store.loadProductDetail({ id });
   }
 }

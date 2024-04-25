@@ -1,0 +1,24 @@
+.selected {
+  background-color: #009688;
+}
+:host {
+  display: block;
+  padding: 1rem;
+  margin: auto;
+  max-width: 800px;
+}
+
+.list-detail {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin: 1rem;
+}
+mat-paginator {
+  width: 370px;
+}
+@media (min-width: 640px) {
+  .list-detail {
+    grid-template-columns: auto 1fr;
+  }
+}

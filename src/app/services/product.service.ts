@@ -10,8 +10,8 @@ import { sortData } from './mock-backend/utils';
 export class ProductService {
   getProducts(options?: {
     search: string | undefined;
-    sortColumn: keyof Product | undefined;
-    sortAscending: boolean;
+    sortColumn?: keyof Product | undefined;
+    sortAscending?: boolean;
     skip: number | undefined;
     take: number | undefined;
   }) {
