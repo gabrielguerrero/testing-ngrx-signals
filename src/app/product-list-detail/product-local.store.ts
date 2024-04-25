@@ -37,7 +37,6 @@ export const ProductsLocalStore = signalStore(
       const productService = inject(ProductService);
       try {
         const res = await lastValueFrom(productService.getProducts());
-        console.log('res', res);
         patchState(store, setAllEntities(res.resultList));
         setLoaded();
       } catch (e) {

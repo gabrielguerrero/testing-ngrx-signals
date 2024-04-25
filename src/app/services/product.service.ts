@@ -34,6 +34,10 @@ export class ProductService {
         direction: options.sortAscending ? 'asc' : 'desc',
       });
     }
+    console.log('getProducts', options, {
+      resultList: result,
+      total,
+    });
     return of({
       resultList: result,
       total,
@@ -51,6 +55,7 @@ export class ProductService {
         maker: 'Nintendo',
         releaseDate: '' + getRandomInteger(1990, 2000),
       } as ProductDetail);
+    console.log('getProductDetail', id, productDetail);
     return of(productDetail).pipe(delay(300));
   }
 }
