@@ -1,4 +1,4 @@
 {
   "installDependencies": true,
-  "startCommand": "pnpm i & pnpm start"
+  "startCommand": "yarn & yarn start"
 }
