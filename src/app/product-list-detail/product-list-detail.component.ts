@@ -32,7 +32,7 @@ import { MatDivider } from '@angular/material/divider';
     @if (store.isLoading()) {
       <mat-spinner />
     } @else {
-      <div class="m-8 grid sm:grid-cols-2 gap-8">
+      <div class="list-detail">
         <div>
           <mat-list>
             <!-- 👇 we use store.entitiesCurrentPage().entities
@@ -61,7 +61,7 @@ import { MatDivider } from '@angular/material/divider';
         @if (store.isLoadProductDetailLoading()) {
           <mat-spinner />
         } @else if (store.isLoadProductDetailLoaded()) {
-          <product-detail [product]="store.loadProductDetailResult()" />
+          <product-detail [product]="store.loadProductDetailResult()!" />
         } @else {
           <div class="content-center"><h2>Please Select a product</h2></div>
         }
@@ -72,6 +72,21 @@ import { MatDivider } from '@angular/material/divider';
     `
       .selected {
         background-color: #009688;
+      }
+      :host {
+        display: block;
+        padding: 1rem;
+      }
+      .list-detail {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        margin: 1rem;
+      }
+      @media (min-width: 640px) {
+        .list-detail {
+          grid-template-columns: auto 1fr;
+        }
       }
     `,
   ],
