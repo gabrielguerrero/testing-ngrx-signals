@@ -76,6 +76,8 @@ import { MatDivider } from '@angular/material/divider';
       :host {
         display: block;
         padding: 1rem;
+        margin: auto;
+        max-width: 800px;
       }
       .list-detail {
         display: grid;
