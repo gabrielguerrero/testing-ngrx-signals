@@ -28,10 +28,6 @@ export const ProductsLocalStore = signalStore(
       entity?.name.toLowerCase().includes(filter?.search.toLowerCase()),
   }),
   withEntitiesSingleSelection({ entity }),
-  withCalls(() => ({
-    loadProductDetail: ({ id }: { id: string }) =>
-      inject(ProductService).getProductDetail(id),
-  })),
   withHooks(({ setLoaded, setError, ...store }) => ({
     onInit: async () => {
       const productService = inject(ProductService);
@@ -43,5 +39,9 @@ export const ProductsLocalStore = signalStore(
         setError(e);
       }
     },
+  })),
+  withCalls(() => ({
+    loadProductDetail: ({ id }: { id: string }) =>
+      inject(ProductService).getProductDetail(id),
   })),
 );

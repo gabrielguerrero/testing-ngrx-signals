@@ -33,10 +33,6 @@ export const ProductsRemoteStore = signalStore(
     },
   }),
   withEntitiesSingleSelection({ entity, collection }),
-  withCalls(() => ({
-    loadProductDetail: ({ id }: { id: string }) =>
-      inject(ProductService).getProductDetail(id),
-  })),
   // this replace the withHooks
   withEntitiesLoadingCall({
     collection,
@@ -50,4 +46,8 @@ export const ProductsRemoteStore = signalStore(
         .pipe(map((res) => ({ entities: res.resultList, total: res.total })));
     },
   }),
+  withCalls(() => ({
+    loadProductDetail: ({ id }: { id: string }) =>
+      inject(ProductService).getProductDetail(id),
+  })),
 );
