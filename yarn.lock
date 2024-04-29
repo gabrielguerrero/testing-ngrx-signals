@@ -2332,10 +2332,10 @@
     "@material/theme" "15.0.0-canary.7f224ddd4.0"
     tslib "^2.1.0"
 
-"@ngrx-traits/signals@^17.1.0-beta.10":
-  version "17.1.0-beta.10"
-  resolved "https://registry.yarnpkg.com/@ngrx-traits/signals/-/signals-17.1.0-beta.10.tgz#aef4e9e8e7e47625b74bafebae3a6f41d2cd82b1"
-  integrity sha512-TIKqwrDMSYabnIMpwo20yohqdrlEAu6W+gTSqcCjJyQaajlLbXYRZu1Je4WxcS+05nGuVfu5diSo5f0JAn+/gw==
+"@ngrx-traits/signals@^17.1.0":
+  version "17.1.0"
+  resolved "https://registry.yarnpkg.com/@ngrx-traits/signals/-/signals-17.1.0.tgz#981d39da77cfcd5730e8b2f89205379ec280ed2d"
+  integrity sha512-ZCUsOd/8XiPk0pWOoU0c868GUDQv+/SmlH32P+Vf+UWSxhCd59U7lk7prWyo5814/X3RLZA3PBE8Per5R06+2w==
   dependencies:
     tslib "^2.3.0"
   optionalDependencies:

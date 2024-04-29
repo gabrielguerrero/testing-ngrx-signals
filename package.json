@@ -20,7 +20,7 @@
     "@angular/platform-browser": "^17.3.0",
     "@angular/platform-browser-dynamic": "^17.3.0",
     "@angular/router": "^17.3.0",
-    "@ngrx-traits/signals": "^17.1.0-beta.10",
+    "@ngrx-traits/signals": "^17.1.0",
     "@ngrx/signals": "^17.2.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
