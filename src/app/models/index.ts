@@ -46,6 +46,7 @@ export type BranchQuery = {
 export interface BranchResponse {
   resultList: Branch[];
   total: number;
+  hasMore: boolean;
 }
 
 export interface BranchFilter {
