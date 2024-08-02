@@ -5,6 +5,7 @@ import {
   withEntitiesLocalFilter,
   withEntitiesLocalPagination,
   withEntitiesSingleSelection,
+  withSyncToWebStorage,
 } from '@ngrx-traits/signals';
 import { patchState, signalStore, type, withHooks } from '@ngrx/signals';
 import { setAllEntities, withEntities } from '@ngrx/signals/entities';
@@ -44,4 +45,8 @@ export const ProductsLocalStore = signalStore(
     loadProductDetail: ({ id }: { id: string }) =>
       inject(ProductService).getProductDetail(id),
   })),
+  withSyncToWebStorage({
+    key: 'sds',
+    type: 'session',
+  }),
 );
