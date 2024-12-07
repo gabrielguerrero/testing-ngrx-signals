@@ -54,8 +54,20 @@ describe('ProductStore', () => {
       expect(store.productsError()).toBe(null);
     });
 
-    it('should store error if backend and call fails', () => {});
-
-    it('should store error if backend and call fails', () => {});
+    it('should store error if backend and call fails', () => {
+      const serviceMock = TestBed.inject(ProductService);
+      const results = new Subject<{
+        resultList: Product[];
+        total: number;
+      }>();
+      vi.spyOn(serviceMock, 'getProducts').mockReturnValue(results);
+      const store = TestBed.inject(ProductStore);
+      store.loadProducts({ search: 'error' });
+      expect(store.isProductsLoading()).toBe(true);
+      const error = new Error('error');
+      results.error(error);
+      expect(store.isProductsLoaded()).toBe(false);
+      expect(store.productsError()).toBe(error);
+    });
   });
 });
