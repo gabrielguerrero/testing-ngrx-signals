@@ -5,7 +5,7 @@ import { userEvent } from '@testing-library/user-event';
 import { DemoComponent } from './demo.component';
 import { TestBed } from '@angular/core/testing';
 import { ProductService } from '../services/product.service';
-import { of } from 'rxjs';
+import { of, Subject } from 'rxjs';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { mockProducts } from '../services/mock-backend/product.handler';
 import { ProductStore } from './demo.store';
@@ -13,10 +13,19 @@ import { signal } from '@angular/core';
 
 describe('DemoComponentTest', () => {
   it('should initially render the list of products', async () => {
+    const apiResponse = new Subject();
     await render(DemoComponent, {
-      providers: [provideHttpClient()],
+      componentProviders: [
+        {
+          provide: ProductService,
+          useValue: {
+            getProducts: () => apiResponse,
+          },
+        },
+      ],
     });
     expect(await screen.findByText('Loading...')).toBeDefined();
+    apiResponse.next({ resultList: mockProducts, total: mockProducts.length });
     const list = await screen.findAllByRole('listitem');
     expect(list.length).toBe(122);
     expect(list[0].textContent).toEqual('Super Mario World');
