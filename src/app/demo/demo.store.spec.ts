@@ -5,12 +5,23 @@ import { Subject } from 'rxjs';
 import { beforeEach, expect, vi } from 'vitest';
 
 import { ProductStore } from './demo.store';
-import { withLoadProducts } from './with-load-products';
 import { Product } from '../models';
 import { ProductService } from '../services/product.service';
 
 describe('ProductStore', () => {
-  it('setProductsLoading should change status to loading ', () => {});
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [ProductStore, provideHttpClient(), ProductService],
+    });
+  });
+
+  it('setProductsLoading should change status to loading ', () => {
+    const store = TestBed.inject(ProductStore);
+    store.setProductsLoading();
+    expect(store.productsStatus()).toBe('loading');
+    expect(store.isProductsLoading()).toBe(true);
+  });
+
   it('setProductsLoaded should change status to loaded ', () => {});
   it('setProductsError should set the error ', () => {});
 
