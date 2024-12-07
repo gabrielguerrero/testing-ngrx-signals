@@ -7,6 +7,7 @@ import { beforeEach, expect, vi } from 'vitest';
 import { ProductStore } from './demo.store';
 import { Product } from '../models';
 import { ProductService } from '../services/product.service';
+import { mockProducts } from '../services/mock-backend/product.handler';
 
 describe('ProductStore', () => {
   beforeEach(() => {
@@ -37,7 +38,21 @@ describe('ProductStore', () => {
   });
 
   describe('loadProducts', () => {
-    it('should call backend and store result', async () => {});
+    it('should call backend and store result', async () => {
+      const serviceMock = TestBed.inject(ProductService);
+      const results = new Subject<{
+        resultList: Product[];
+        total: number;
+      }>();
+      vi.spyOn(serviceMock, 'getProducts').mockReturnValue(results);
+      const store = TestBed.inject(ProductStore);
+      store.loadProducts({});
+      expect(store.isProductsLoading()).toBe(true);
+      results.next({ resultList: mockProducts, total: mockProducts.length });
+      expect(store.products().length).toEqual(mockProducts.length);
+      expect(store.isProductsLoaded()).toBe(true);
+      expect(store.productsError()).toBe(null);
+    });
 
     it('should store error if backend and call fails', () => {});
 
