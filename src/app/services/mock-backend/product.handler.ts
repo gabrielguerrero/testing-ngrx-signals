@@ -210,7 +210,7 @@ const images = [
   'images/Donkey_Kong_Country.png',
 ];
 
-const mockProducts: Product[] = [
+export const mockProducts: Product[] = [
   ...snes.map((name, id) => ({
     name,
     id: id + '',
