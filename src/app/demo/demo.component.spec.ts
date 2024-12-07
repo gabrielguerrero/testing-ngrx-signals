@@ -22,5 +22,19 @@ describe('DemoComponentTest', () => {
     expect(list[0].textContent).toEqual('Super Mario World');
   });
 
-  it('should filter the products if typed on the filter box', () => {});
+  it('should filter the products if typed on the filter box', async () => {
+    await render(DemoComponent, {
+      providers: [provideHttpClient()],
+    });
+    const searchBox = await screen.getByRole('textbox', {
+      name: /search/i,
+    });
+    await userEvent.type(searchBox, 'Zelda');
+    expect(screen.findByText('Loading...')).toBeDefined();
+    const list = await screen.findAllByRole('listitem');
+    expect(list.length).toBeGreaterThan(0);
+    expect(
+      list.map((v) => v.textContent).every((v) => v?.match(/Zelda/i)),
+    ).toBeTruthy();
+  });
 });
