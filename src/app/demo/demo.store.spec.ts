@@ -29,7 +29,12 @@ describe('ProductStore', () => {
     expect(store.isProductsLoaded()).toBe(true);
   });
 
-  it('setProductsError should set the error ', () => {});
+  it('setProductsError should set the error ', () => {
+    const store = TestBed.inject(ProductStore);
+    const error = new Error('error');
+    store.setProductsError(error);
+    expect(store.productsError()).toBe(error);
+  });
 
   describe('loadProducts', () => {
     it('should call backend and store result', async () => {});
