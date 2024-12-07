@@ -12,7 +12,15 @@ import { ProductStore } from './demo.store';
 import { signal } from '@angular/core';
 
 describe('DemoComponentTest', () => {
-  it('should initially render the list of products', () => {});
+  it('should initially render the list of products', async () => {
+    await render(DemoComponent, {
+      providers: [provideHttpClient()],
+    });
+    expect(await screen.findByText('Loading...')).toBeDefined();
+    const list = await screen.findAllByRole('listitem');
+    expect(list.length).toBe(122);
+    expect(list[0].textContent).toEqual('Super Mario World');
+  });
 
   it('should filter the products if typed on the filter box', () => {});
 });
