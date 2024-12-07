@@ -22,7 +22,13 @@ describe('ProductStore', () => {
     expect(store.isProductsLoading()).toBe(true);
   });
 
-  it('setProductsLoaded should change status to loaded ', () => {});
+  it('setProductsLoaded should change status to loaded ', () => {
+    const store = TestBed.inject(ProductStore);
+    store.setProductsLoaded();
+    expect(store.productsStatus()).toBe('loaded');
+    expect(store.isProductsLoaded()).toBe(true);
+  });
+
   it('setProductsError should set the error ', () => {});
 
   describe('loadProducts', () => {
