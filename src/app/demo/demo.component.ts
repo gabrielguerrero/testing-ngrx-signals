@@ -15,11 +15,11 @@ import { ProductSearchFormComponent } from '../components/product-search-form/pr
     <product-search-form
       (searchProductChange)="store.loadProducts({ search: $event!.search })"
     />
-    @if (store.isProductsLoading()) {
+    @if (store.isLoadProductsLoading()) {
       <p class="m-8">Loading...</p>
-    } @else if (store.isProductsLoaded()) {
+    } @else if (store.isLoadProductsLoaded()) {
       <mat-list role="list">
-        @for (product of store.products(); track product.id) {
+        @for (product of store.loadProductsResult(); track product.id) {
           <mat-list-item role="listitem">{{ product.name }}</mat-list-item>
         }
       </mat-list>
