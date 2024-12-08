@@ -17,7 +17,9 @@ export const ProductStore = signalStore(
   withState<{
     products: Product[];
     productsStatus: 'init' | 'loading' | 'loaded' | { error: unknown };
+    message: string;
   }>({
+    message: '',
     products: [],
     productsStatus: 'init',
   }),
@@ -70,6 +72,13 @@ export const ProductStore = signalStore(
   withHooks((store) => ({
     onInit: () => {
       store.loadProducts({});
+      effect(
+        () => {
+          if (store.isProductsLoaded())
+            patchState(store, { message: 'All Loaded' });
+        },
+        { allowSignalWrites: true },
+      );
     },
   })),
 );

@@ -23,6 +23,13 @@ describe('ProductStore', () => {
     expect(store.isProductsLoading()).toBe(true);
   });
 
+  it('set message after products are loaded', () => {
+    const store = TestBed.inject(ProductStore);
+    store.setProductsLoaded();
+    // TestBed.flushEffects();
+    expect(store.message()).toEqual('All Loaded');
+  });
+
   it('setProductsLoaded should change status to loaded ', () => {
     const store = TestBed.inject(ProductStore);
     store.setProductsLoaded();
