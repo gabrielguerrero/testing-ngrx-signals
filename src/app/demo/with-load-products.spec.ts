@@ -4,42 +4,35 @@ import { signalStore } from '@ngrx/signals';
 import { Subject } from 'rxjs';
 import { beforeEach, expect, vi } from 'vitest';
 
-import { ProductStore } from './demo.store';
 import { Product } from '../models';
 import { ProductService } from '../services/product.service';
 import { mockProducts } from '../services/mock-backend/product.handler';
 import { withLoadProducts } from './with-load-products';
 
 describe('ProductStore', () => {
+  const Store = signalStore(withLoadProducts());
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [ProductStore, provideHttpClient(), ProductService],
+      providers: [Store, provideHttpClient(), ProductService],
     });
   });
 
   it('setProductsLoading should change status to loading ', () => {
-    const store = TestBed.inject(ProductStore);
+    const store = TestBed.inject(Store);
     store.setProductsLoading();
     expect(store.productsStatus()).toBe('loading');
     expect(store.isProductsLoading()).toBe(true);
   });
 
-  it('set message after products are loaded', () => {
-    const store = TestBed.inject(ProductStore);
-    store.setProductsLoaded();
-    TestBed.flushEffects();
-    expect(store.message()).toEqual('All Loaded');
-  });
-
   it('setProductsLoaded should change status to loaded ', () => {
-    const store = TestBed.inject(ProductStore);
+    const store = TestBed.inject(Store);
     store.setProductsLoaded();
     expect(store.productsStatus()).toBe('loaded');
     expect(store.isProductsLoaded()).toBe(true);
   });
 
   it('setProductsError should set the error ', () => {
-    const store = TestBed.inject(ProductStore);
+    const store = TestBed.inject(Store);
     const error = new Error('error');
     store.setProductsError(error);
     expect(store.productsError()).toBe(error);
@@ -53,7 +46,7 @@ describe('ProductStore', () => {
         total: number;
       }>();
       vi.spyOn(serviceMock, 'getProducts').mockReturnValue(results);
-      const store = TestBed.inject(ProductStore);
+      const store = TestBed.inject(Store);
       store.loadProducts({});
       expect(store.isProductsLoading()).toBe(true);
       results.next({ resultList: mockProducts, total: mockProducts.length });
@@ -69,7 +62,7 @@ describe('ProductStore', () => {
         total: number;
       }>();
       vi.spyOn(serviceMock, 'getProducts').mockReturnValue(results);
-      const store = TestBed.inject(ProductStore);
+      const store = TestBed.inject(Store);
       store.loadProducts({ search: 'error' });
       expect(store.isProductsLoading()).toBe(true);
       const error = new Error('error');
