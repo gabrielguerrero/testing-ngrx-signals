@@ -13,19 +13,23 @@ import { signal } from '@angular/core';
 
 describe('DemoComponentTest', () => {
   it('should initially render the list of products', async () => {
-    const apiResponse = new Subject();
+    const mockStore = {
+      products: signal(mockProducts),
+      isProductsLoading: signal(true),
+      isProductsLoaded: signal(false),
+      loadProducts: () => {},
+    };
     await render(DemoComponent, {
       componentProviders: [
         {
-          provide: ProductService,
-          useValue: {
-            getProducts: () => apiResponse,
-          },
+          provide: ProductStore,
+          useValue: mockStore,
         },
       ],
     });
     expect(await screen.findByText('Loading...')).toBeDefined();
-    apiResponse.next({ resultList: mockProducts, total: mockProducts.length });
+    mockStore.isProductsLoading.set(false);
+    mockStore.isProductsLoaded.set(true);
     const list = await screen.findAllByRole('listitem');
     expect(list.length).toBe(122);
     expect(list[0].textContent).toEqual('Super Mario World');
